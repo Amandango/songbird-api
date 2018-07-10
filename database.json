@@ -1,0 +1,23 @@
+{
+    "defaultEnv": {"ENV": "NODE_ENV"},
+
+    "amanda": {
+        "driver": "mysql",
+        "port": "3306",
+        "host": "localhost",
+        "user": "root",
+        "password": "root123",
+        "database": "songbird"
+    },
+
+    "live":{
+            "driver": "mysql",
+            "port": 3306,
+			"host":{"ENV":"DATABASE_HOST"},
+            "password": {"ENV": "DATABASE_PASSWORD"},
+            "user":{"ENV":"DATABASE_USERNAME"},
+            "database":{"ENV":"DATABASE_NAME"} 
+        }
+        
+   
+}
