@@ -10,13 +10,13 @@ import {BootMixin, Booter, Binding} from '@loopback/boot';
 
 export class SongbirdApiApplication extends BootMixin(RepositoryMixin(RestApplication)) {
   constructor(options?: ApplicationConfig) {
-    super(options);
+    // super(options);
 
-    // super({
-    //   rest: {
-    //     port: process.env.PORT || 3000
-    //   }
-    // })
+    super({
+      rest: {
+        port: process.env.PORT || 3000
+      }
+    })
 
     // Set up the custom sequence
     this.sequence(MySequence);
@@ -24,11 +24,11 @@ export class SongbirdApiApplication extends BootMixin(RepositoryMixin(RestApplic
     var dataSourceConfig = new juggler.DataSource({
       name: "db",
       connector: "loopback-connector-mysql",
-      host: 'localhost',
+      host: process.env.DATABASE_HOST,
       port: 3306,
-      database: 'songbird',
-      user: 'root',
-      password: 'root123'
+      database: process.env.DATABASE_NAME,
+      user: process.env.DATABASE_USERNAME,
+      password: process.env.DATABASE_PASSWORD
   });
   this.dataSource(dataSourceConfig);
 

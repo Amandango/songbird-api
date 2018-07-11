@@ -9,22 +9,22 @@ const boot_1 = require("@loopback/boot");
 /* tslint:enable:no-unused-variable */
 class SongbirdApiApplication extends boot_1.BootMixin(repository_1.RepositoryMixin(rest_1.RestApplication)) {
     constructor(options) {
-        super(options);
-        // super({
-        //   rest: {
-        //     port: process.env.PORT || 3000
-        //   }
-        // })
+        // super(options);
+        super({
+            rest: {
+                port: process.env.PORT || 3000
+            }
+        });
         // Set up the custom sequence
         this.sequence(sequence_1.MySequence);
         var dataSourceConfig = new repository_1.juggler.DataSource({
             name: "db",
             connector: "loopback-connector-mysql",
-            host: 'localhost',
+            host: process.env.DATABASE_HOST,
             port: 3306,
-            database: 'songbird',
-            user: 'root',
-            password: 'root123'
+            database: process.env.DATABASE_NAME,
+            user: process.env.DATABASE_USERNAME,
+            password: process.env.DATABASE_PASSWORD
         });
         this.dataSource(dataSourceConfig);
         this.projectRoot = __dirname;
