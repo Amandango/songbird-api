@@ -32,7 +32,7 @@
     "start": "node .",
     "prepublishOnly": "npm run test",
     "amanda": "DATABASE_HOST=localhost DATABASE_NAME=songbird DATABASE_USERNAME=root DATABASE_PASSWORD='root123' npm start",
-    "live": "NODE_ENV=live db-migrate up && npm start"
+    "live": "db-migrate and node ."
   },
   "repository": {
     "type": "git"
