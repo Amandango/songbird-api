@@ -14,14 +14,14 @@ export class LoginController {
   @post('/login')
     async login(@requestBody() login: Login): Promise<any> {
 
-        if (!login.username || !login.password) {
+        if (!login.email || !login.password) {
             throw new HttpErrors.Unauthorized('invalid credentials');
         }
       
 
         let userExists: boolean = !!(await this.userRepo.count({
             and: [
-                { username: login.username },
+                { email: login.email },
             ],
         }));
 
@@ -30,7 +30,7 @@ export class LoginController {
         }
 
 
-        var currentUser = await this.userRepo.findOne({where: {username: login.username}});
+        var currentUser = await this.userRepo.findOne({where: {email: login.email}});
 
         if (await bcrypt.compare(login.password, currentUser.password)) {
 

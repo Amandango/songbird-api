@@ -23,18 +23,18 @@ let LoginController = class LoginController {
         this.userRepo = userRepo;
     }
     async login(login) {
-        if (!login.username || !login.password) {
+        if (!login.email || !login.password) {
             throw new rest_1.HttpErrors.Unauthorized('invalid credentials');
         }
         let userExists = !!(await this.userRepo.count({
             and: [
-                { username: login.username },
+                { email: login.email },
             ],
         }));
         if (!userExists) {
             throw new rest_1.HttpErrors.Unauthorized('user does not exist');
         }
-        var currentUser = await this.userRepo.findOne({ where: { username: login.username } });
+        var currentUser = await this.userRepo.findOne({ where: { email: login.email } });
         if (await bcrypt.compare(login.password, currentUser.password)) {
             var jwt = jsonwebtoken_1.sign({
                 user: {

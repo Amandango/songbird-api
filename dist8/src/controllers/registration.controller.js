@@ -22,10 +22,10 @@ let RegistrationController = class RegistrationController {
         this.userRepo = userRepo;
     }
     async register(newUser) {
-        if (!newUser.firstname || !newUser.lastname || !newUser.username || !newUser.email || !newUser.password) {
+        if (!newUser.firstname || !newUser.lastname || !newUser.email || !newUser.password) {
             throw new rest_1.HttpErrors.BadRequest('missing data');
         }
-        let userExists = !!(await this.userRepo.count({ username: newUser.username } || { email: newUser.email }));
+        let userExists = !!(await this.userRepo.count({ email: newUser.email }));
         if (userExists) {
             throw new rest_1.HttpErrors.BadRequest('user already exists');
         }
@@ -34,7 +34,6 @@ let RegistrationController = class RegistrationController {
         userToStore.id = newUser.id;
         userToStore.firstname = newUser.firstname;
         userToStore.lastname = newUser.lastname;
-        userToStore.username = newUser.username;
         userToStore.email = newUser.email;
         userToStore.password = hashedPassword;
         let storedUser = await this.userRepo.create(userToStore);

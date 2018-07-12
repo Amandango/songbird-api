@@ -12,12 +12,12 @@ export class RegistrationController {
 
   @post('/register')
   async register(@requestBody() newUser: Users): Promise<any> {
-    if (!newUser.firstname || !newUser.lastname || !newUser.username || !newUser.email || !newUser.password) {
+    if (!newUser.firstname || !newUser.lastname || !newUser.email || !newUser.password) {
       throw new HttpErrors.BadRequest('missing data');
     }
 
     let userExists: boolean = !!(await this.userRepo.count(
-      { username: newUser.username } || { email: newUser.email }
+      { email: newUser.email }
     ));
 
     if (userExists) {
@@ -30,7 +30,6 @@ export class RegistrationController {
     userToStore.id = newUser.id;
     userToStore.firstname = newUser.firstname;
     userToStore.lastname = newUser.lastname;
-    userToStore.username = newUser.username;
     userToStore.email = newUser.email;
     userToStore.password = hashedPassword;
 

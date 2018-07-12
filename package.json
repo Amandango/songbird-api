@@ -31,7 +31,8 @@
     "prestart": "npm run build:current",
     "start": "node .",
     "prepublishOnly": "npm run test",
-    "amanda": "DATABASE_HOST=localhost DATABASE_NAME=songbird DATABASE_USERNAME=root DATABASE_PASSWORD='root123' npm start"
+    "amanda": "DATABASE_HOST=localhost DATABASE_NAME=songbird DATABASE_USERNAME=root DATABASE_PASSWORD='root123' npm start",
+    "live": "db-migrate up && node ."
   },
   "repository": {
     "type": "git"

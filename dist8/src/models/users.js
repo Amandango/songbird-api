@@ -42,13 +42,6 @@ __decorate([
         required: true
     }),
     __metadata("design:type", String)
-], Users.prototype, "username", void 0);
-__decorate([
-    repository_1.property({
-        type: 'string',
-        required: true
-    }),
-    __metadata("design:type", String)
 ], Users.prototype, "email", void 0);
 __decorate([
     repository_1.property({

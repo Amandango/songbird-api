@@ -34,12 +34,6 @@ exports.up = function(db, done) {
       notNull: true
     },
 
-    username: {
-      type: 'string',
-      length: 100,
-      notNull: true
-    },
-
     email: {
       type: 'string',
       length: 100,
