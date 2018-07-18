@@ -5,4 +5,5 @@ export declare class TextController {
     constructor(textsRepo: TextsRepository);
     postTextMoment(textMoment: Texts): Promise<any>;
     getTextsById(jwt: string): Promise<Texts[]>;
+    postVoiceRecordingsById(voiceRecording: any): Promise<any>;
 }

@@ -7,6 +7,7 @@ import { sign, verify} from 'jsonwebtoken'
 import * as bcrypt from 'bcrypt';
 
 export class LoginController {
+  public currentUser: any;
   constructor(
     @repository(UsersRepository.name) private userRepo: UsersRepository
   ) {}
@@ -30,18 +31,17 @@ export class LoginController {
         }
 
 
-        var currentUser = await this.userRepo.findOne({where: {email: login.email}});
+        this.currentUser = await this.userRepo.findOne({where: {email: login.email}});
 
-        if (await bcrypt.compare(login.password, currentUser.password)) {
+        if (await bcrypt.compare(login.password, this.currentUser.password)) {
 
         var jwt = sign(
             {
               user: {
-                id: currentUser.id,
-                firstname: currentUser.firstname,
-                lastname: currentUser.lastname,
-                username: currentUser.username,
-                email: currentUser.email
+                id: this.currentUser.id,
+                firstname: this.currentUser.firstname,
+                lastname: this.currentUser.lastname,
+                email: this.currentUser.email
               },
             },
             'encryption',

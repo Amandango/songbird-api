@@ -28,7 +28,7 @@ declare const SongbirdApiApplication_base: (new (...args: any[]) => {
     [x: string]: any;
     repository(repo: Class<Repository<any>>): void;
     getRepository<R extends Repository<any>>(repo: Class<R>): Promise<R>;
-    dataSource(dataSource: juggler.DataSource, name?: string | undefined): void;
+    dataSource(dataSource: juggler.DataSource | Class<juggler.DataSource>, name?: string | undefined): void;
     component(component: Class<{}>): void;
     mountComponentRepository(component: Class<{}>): void;
 }) & typeof RestApplication;

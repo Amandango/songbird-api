@@ -4,9 +4,15 @@ import { Texts } from '../models/texts';
 import { TextsRepository } from '../repositories/texts.repository';
 import { sign, verify } from 'jsonwebtoken';
 
+import S3 = require('aws-sdk/clients/s3');
+
+const { readFileSync } = require('fs');
+const { join, extname } = require('path');
+const AWS = require('aws-sdk');
+AWS.config.loadFromPath('src/config.json');
+
 
 export class TextController {
-
   constructor(
     @repository(TextsRepository.name) private textsRepo: TextsRepository
   ) { }
@@ -29,5 +35,24 @@ export class TextController {
     } catch (err) {
       throw new HttpErrors.BadRequest('JWT token invalid');
     }
+  }
+
+  @post('/postVoiceRecordings')
+  async postVoiceRecordingsById(@requestBody() voiceRecording: any): Promise<any> {
+    console.log('trying to work');
+
+    var s3 = new AWS.S3();
+    var bucketParams = { Bucket: 'songbird-bucket' };
+    s3.createBucket(bucketParams)
+    // s3 = new AWS.S3({ params: { Bucket: 'songbird-bucket' } })
+    var data = { Key: 'recordingFile', Body: voiceRecording };
+    s3.putObject(data, function (err: any, data: any) {
+      if (err) {
+        console.log('Error uploading data: ', data);
+      } else {
+        console.log('succesfully uploaded the image!');
+      }
+    });
+
   }
 }

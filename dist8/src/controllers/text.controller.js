@@ -17,6 +17,10 @@ const rest_1 = require("@loopback/rest");
 const texts_1 = require("../models/texts");
 const texts_repository_1 = require("../repositories/texts.repository");
 const jsonwebtoken_1 = require("jsonwebtoken");
+const { readFileSync } = require('fs');
+const { join, extname } = require('path');
+const AWS = require('aws-sdk');
+AWS.config.loadFromPath('src/config.json');
 let TextController = class TextController {
     constructor(textsRepo) {
         this.textsRepo = textsRepo;
@@ -37,6 +41,22 @@ let TextController = class TextController {
             throw new rest_1.HttpErrors.BadRequest('JWT token invalid');
         }
     }
+    async postVoiceRecordingsById(voiceRecording) {
+        console.log('trying to work');
+        var s3 = new AWS.S3();
+        var bucketParams = { Bucket: 'songbird-bucket' };
+        s3.createBucket(bucketParams);
+        // s3 = new AWS.S3({ params: { Bucket: 'songbird-bucket' } })
+        var data = { Key: 'recordingFile', Body: voiceRecording };
+        s3.putObject(data, function (err, data) {
+            if (err) {
+                console.log('Error uploading data: ', data);
+            }
+            else {
+                console.log('succesfully uploaded the image!');
+            }
+        });
+    }
 };
 __decorate([
     rest_1.post('/texts'),
@@ -52,6 +72,13 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], TextController.prototype, "getTextsById", null);
+__decorate([
+    rest_1.post('/postVoiceRecordings'),
+    __param(0, rest_1.requestBody()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], TextController.prototype, "postVoiceRecordingsById", null);
 TextController = __decorate([
     __param(0, repository_1.repository(texts_repository_1.TextsRepository.name)),
     __metadata("design:paramtypes", [texts_repository_1.TextsRepository])

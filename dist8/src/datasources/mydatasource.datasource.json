@@ -1,0 +1,4 @@
+{
+  "name": "mydatasource",
+  "connector": "loopback-component-storage"
+}
