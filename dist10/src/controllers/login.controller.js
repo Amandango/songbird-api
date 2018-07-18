@@ -34,15 +34,14 @@ let LoginController = class LoginController {
         if (!userExists) {
             throw new rest_1.HttpErrors.Unauthorized('user does not exist');
         }
-        var currentUser = await this.userRepo.findOne({ where: { email: login.email } });
-        if (await bcrypt.compare(login.password, currentUser.password)) {
+        this.currentUser = await this.userRepo.findOne({ where: { email: login.email } });
+        if (await bcrypt.compare(login.password, this.currentUser.password)) {
             var jwt = jsonwebtoken_1.sign({
                 user: {
-                    id: currentUser.id,
-                    firstname: currentUser.firstname,
-                    lastname: currentUser.lastname,
-                    username: currentUser.username,
-                    email: currentUser.email
+                    id: this.currentUser.id,
+                    firstname: this.currentUser.firstname,
+                    lastname: this.currentUser.lastname,
+                    email: this.currentUser.email
                 },
             }, 'encryption', {
                 issuer: 'auth.songbird',
