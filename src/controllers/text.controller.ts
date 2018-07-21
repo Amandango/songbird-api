@@ -45,33 +45,36 @@ export class TextController {
     }
   }
 
-  @get('/getWeekTextsById')
-  async getWeekTextsById(@param.query.string('jwt') jwt: string): Promise<Texts[]> {
-    if (!jwt) throw new HttpErrors.Unauthorized('JWT token is required');
+  // @get('/getWeekTextsById')
+  // async getWeekTextsById(@param.query.string('jwt') jwt: string): Promise<Texts[]> {
+  //   if (!jwt) throw new HttpErrors.Unauthorized('JWT token is required');
 
-    try {
-      var jwtBody = verify(jwt, 'encryption') as any;
-      console.log(jwtBody.user.id);
+  //   try {
+  //     var jwtBody = verify(jwt, 'encryption') as any;
+  //     console.log(jwtBody.user.id);
 
-      var testDate = new Date();
-      var weekInMilliseconds = 7 * 24 * 60 * 60 * 1000;
-      // var dayInMilliseconds = 24 * 60 * 60 * 1000;
-      testDate.setTime(testDate.getTime() + weekInMilliseconds);
-      // testDate.setTime(testDate.getTime() + dayInMilliseconds);
+  //     var testDate = new Date();
+  //     var weekInMilliseconds = 7 * 24 * 60 * 60 * 1000;
+  //     // var dayInMilliseconds = 24 * 60 * 60 * 1000;
+  //     testDate.setTime(testDate.getTime() - weekInMilliseconds);
+  //     var currentDate = new Date();
+  //     console.log('the test date is' + testDate);
+  //     console.log('the current date is' + currentDate);
+  //     // testDate.setTime(testDate.getTime() + dayInMilliseconds);
 
-      var allWeekTexts = await this.textsRepo.find({
-        where: {
-          and: [
-            { userId: jwtBody.user.id },
-            { createdOn: { between: [testDate, new Date()] } }
-          ]
-        }
-      });
-      return allWeekTexts;
-    } catch (err) {
-      throw new HttpErrors.BadRequest('JWT token invalid');
-    }
-  }
+  //     var allWeekTexts = await this.textsRepo.find({
+  //       where: {
+  //         and: [
+  //           { userId: jwtBody.user.id },
+  //           { createdOn: { between: [testDate, currentDate] } }
+  //         ]
+  //       }
+  //     });
+  //     return allWeekTexts;
+  //   } catch (err) {
+  //     throw new HttpErrors.BadRequest('JWT token invalid');
+  //   }
+  // }
 
   @post('/postVoiceRecordings')
   async postVoiceRecordingsById(@requestBody() voiceRecording: any): Promise<any> {
