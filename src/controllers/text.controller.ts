@@ -10,7 +10,7 @@ import S3 = require('aws-sdk/clients/s3');
 const { readFileSync } = require('fs');
 const { join, extname } = require('path');
 const AWS = require('aws-sdk');
-AWS.config.loadFromPath('./src/config.json');
+AWS.config.loadFromPath('src/config.json');
 
 
 export class TextController {
