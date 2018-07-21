@@ -36,11 +36,9 @@ let TextController = class TextController {
         try {
             var jwtBody = jsonwebtoken_1.verify(jwt, 'encryption');
             console.log(jwtBody);
-            console.log(jwtBody.id);
+            console.log(jwtBody.user.id);
             var allTexts = await this.textsRepo.find({
-                where: {
-                    userId: jwtBody.id,
-                },
+                where: { userId: jwtBody.user.id }
             });
             console.log(allTexts);
             return allTexts;
