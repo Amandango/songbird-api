@@ -9,5 +9,5 @@ export declare class TextController {
     postTextMoment(textMoment: Texts): Promise<any>;
     getTextsById(jwt: string): Promise<Texts[]>;
     getWeekTextsById(jwt: string): Promise<Texts[]>;
-    postVoiceRecordingsById(voiceRecording: File): Promise<any>;
+    postVoiceRecordingsById(voiceRecording: ArrayBuffer): Promise<any>;
 }
