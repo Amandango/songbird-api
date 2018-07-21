@@ -21,7 +21,7 @@ const jsonwebtoken_1 = require("jsonwebtoken");
 const { readFileSync } = require('fs');
 const { join, extname } = require('path');
 const AWS = require('aws-sdk');
-AWS.config.loadFromPath('./src/config.json');
+AWS.config.loadFromPath('src/config.json');
 let TextController = class TextController {
     constructor(textsRepo, usersRepo) {
         this.textsRepo = textsRepo;
