@@ -78,7 +78,7 @@ export class TextController {
   }
 
   @post('/postVoiceRecordings')
-  async postVoiceRecordingsById(@requestBody() voiceRecording: any): Promise<any> {
+  async postVoiceRecordingsById(@requestBody() voiceRecording: File): Promise<any> {
     console.log('trying to work');
 
     var s3 = new AWS.S3();

@@ -21,7 +21,7 @@ const jsonwebtoken_1 = require("jsonwebtoken");
 const { readFileSync } = require('fs');
 const { join, extname } = require('path');
 const AWS = require('aws-sdk');
-AWS.config.loadFromPath('src/config.json');
+AWS.config.loadFromPath('./src/config.json');
 let TextController = class TextController {
     constructor(textsRepo, usersRepo) {
         this.textsRepo = textsRepo;
@@ -116,7 +116,7 @@ __decorate([
     rest_1.post('/postVoiceRecordings'),
     __param(0, rest_1.requestBody()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [File]),
     __metadata("design:returntype", Promise)
 ], TextController.prototype, "postVoiceRecordingsById", null);
 TextController = __decorate([
