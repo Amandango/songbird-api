@@ -80,12 +80,14 @@ export class TextController {
   async postVoiceRecordingsById(@requestBody() voiceRecording: any): Promise<any> {
     
     console.log('trying to work');
+    console.log(voiceRecording);
+    var newDate = new Date();
 
     var s3 = new AWS.S3();
     var bucketParams = { Bucket: 'songbird-bucket' };
     s3.createBucket(bucketParams)
     // s3 = new AWS.S3({ params: { Bucket: 'songbird-bucket' } })
-    var data = { Key: new Date(), Body: voiceRecording };
+    var data = { Key: newDate, Body: voiceRecording };
     s3.putObject(data, function (err: any, data: any) {
       if (err) {
         console.log('Error uploading data: ', data);
