@@ -34,6 +34,7 @@ export class TextController {
     try {
       var jwtBody = verify(jwt, 'encryption') as any;
       console.log(jwtBody);
+      console.log(jwtBody.id);
 
       var allTexts = await this.textsRepo.find({
         where:
@@ -41,6 +42,7 @@ export class TextController {
           userId: jwtBody.id,
         },
       });
+      console.log(allTexts);
       return allTexts;
     } catch (err) {
       throw new HttpErrors.BadRequest('JWT token invalid');
