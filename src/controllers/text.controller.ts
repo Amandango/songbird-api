@@ -85,7 +85,7 @@ export class TextController {
     var bucketParams = { Bucket: 'songbird-bucket' };
     s3.createBucket(bucketParams)
     // s3 = new AWS.S3({ params: { Bucket: 'songbird-bucket' } })
-    var data = { Key: 'recordingFile', Body: voiceRecording };
+    var data = { Key: new Date(), Body: voiceRecording };
     s3.putObject(data, function (err: any, data: any) {
       if (err) {
         console.log('Error uploading data: ', data);
