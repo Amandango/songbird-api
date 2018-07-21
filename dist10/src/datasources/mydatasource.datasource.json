@@ -1,7 +1,0 @@
-{
-  "name": "mydatasource",
-  "connector": "loopback-component-storage",
-  "provider": "amazon",
-  "key": "your amazon key",
-  "keyId": "your amazon key id"
-}
