@@ -16,14 +16,16 @@ const repository_1 = require("@loopback/repository");
 const rest_1 = require("@loopback/rest");
 const texts_1 = require("../models/texts");
 const texts_repository_1 = require("../repositories/texts.repository");
+const users_repository_1 = require("../repositories/users.repository");
 const jsonwebtoken_1 = require("jsonwebtoken");
 const { readFileSync } = require('fs');
 const { join, extname } = require('path');
 const AWS = require('aws-sdk');
 AWS.config.loadFromPath('src/config.json');
 let TextController = class TextController {
-    constructor(textsRepo) {
+    constructor(textsRepo, usersRepo) {
         this.textsRepo = textsRepo;
+        this.usersRepo = usersRepo;
     }
     async postTextMoment(textMoment) {
         return await this.textsRepo.create(textMoment);
@@ -34,8 +36,38 @@ let TextController = class TextController {
         try {
             var jwtBody = jsonwebtoken_1.verify(jwt, 'encryption');
             console.log(jwtBody);
-            var allTexts = await this.textsRepo.find({ where: { userId: jwtBody.id } });
+            var allTexts = await this.textsRepo.find({
+                where: {
+                    userId: jwtBody.id,
+                    order: 'createdOn ASC'
+                },
+            });
             return allTexts;
+        }
+        catch (err) {
+            throw new rest_1.HttpErrors.BadRequest('JWT token invalid');
+        }
+    }
+    async getWeekTextsById(jwt) {
+        if (!jwt)
+            throw new rest_1.HttpErrors.Unauthorized('JWT token is required');
+        try {
+            var jwtBody = jsonwebtoken_1.verify(jwt, 'encryption');
+            console.log(jwtBody);
+            var testDate = new Date();
+            var weekInMilliseconds = 7 * 24 * 60 * 60 * 1000;
+            var dayInMilliseconds = 24 * 60 * 60 * 1000;
+            // testDate.setTime(testDate.getTime() + weekInMilliseconds);
+            testDate.setTime(testDate.getTime() + dayInMilliseconds);
+            var allWeekTexts = await this.textsRepo.find({
+                where: {
+                    and: [
+                        { userId: jwtBody.id },
+                        { createdOn: { between: [testDate, new Date()] } }
+                    ]
+                }
+            });
+            return allWeekTexts;
         }
         catch (err) {
             throw new rest_1.HttpErrors.BadRequest('JWT token invalid');
@@ -56,6 +88,7 @@ let TextController = class TextController {
                 console.log('succesfully uploaded the image!');
             }
         });
+        return voiceRecording;
     }
 };
 __decorate([
@@ -73,6 +106,13 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], TextController.prototype, "getTextsById", null);
 __decorate([
+    rest_1.get('/getWeekTextsById'),
+    __param(0, rest_1.param.query.string('jwt')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], TextController.prototype, "getWeekTextsById", null);
+__decorate([
     rest_1.post('/postVoiceRecordings'),
     __param(0, rest_1.requestBody()),
     __metadata("design:type", Function),
@@ -81,7 +121,9 @@ __decorate([
 ], TextController.prototype, "postVoiceRecordingsById", null);
 TextController = __decorate([
     __param(0, repository_1.repository(texts_repository_1.TextsRepository.name)),
-    __metadata("design:paramtypes", [texts_repository_1.TextsRepository])
+    __param(1, repository_1.repository(users_repository_1.UsersRepository.name)),
+    __metadata("design:paramtypes", [texts_repository_1.TextsRepository,
+        users_repository_1.UsersRepository])
 ], TextController);
 exports.TextController = TextController;
 //# sourceMappingURL=text.controller.js.map

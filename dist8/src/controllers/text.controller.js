@@ -16,14 +16,16 @@ const repository_1 = require("@loopback/repository");
 const rest_1 = require("@loopback/rest");
 const texts_1 = require("../models/texts");
 const texts_repository_1 = require("../repositories/texts.repository");
+const users_repository_1 = require("../repositories/users.repository");
 const jsonwebtoken_1 = require("jsonwebtoken");
 const { readFileSync } = require('fs');
 const { join, extname } = require('path');
 const AWS = require('aws-sdk');
 AWS.config.loadFromPath('src/config.json');
 let TextController = class TextController {
-    constructor(textsRepo) {
+    constructor(textsRepo, usersRepo) {
         this.textsRepo = textsRepo;
+        this.usersRepo = usersRepo;
     }
     async postTextMoment(textMoment) {
         return await this.textsRepo.create(textMoment);
@@ -34,7 +36,12 @@ let TextController = class TextController {
         try {
             var jwtBody = jsonwebtoken_1.verify(jwt, 'encryption');
             console.log(jwtBody);
-            var allTexts = await this.textsRepo.find({ where: { userId: jwtBody.id } });
+            var allTexts = await this.textsRepo.find({
+                where: {
+                    userId: jwtBody.id,
+                    order: 'createdOn ASC'
+                },
+            });
             return allTexts;
         }
         catch (err) {
@@ -81,6 +88,7 @@ let TextController = class TextController {
                 console.log('succesfully uploaded the image!');
             }
         });
+        return voiceRecording;
     }
 };
 __decorate([
@@ -113,7 +121,9 @@ __decorate([
 ], TextController.prototype, "postVoiceRecordingsById", null);
 TextController = __decorate([
     __param(0, repository_1.repository(texts_repository_1.TextsRepository.name)),
-    __metadata("design:paramtypes", [texts_repository_1.TextsRepository])
+    __param(1, repository_1.repository(users_repository_1.UsersRepository.name)),
+    __metadata("design:paramtypes", [texts_repository_1.TextsRepository,
+        users_repository_1.UsersRepository])
 ], TextController);
 exports.TextController = TextController;
 //# sourceMappingURL=text.controller.js.map
