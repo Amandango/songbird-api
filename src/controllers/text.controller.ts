@@ -37,7 +37,7 @@ export class TextController {
       console.log(jwtBody.user.id);
 
       var allTexts = await this.textsRepo.find({
-        where:{userId: jwtBody.user.id}});
+        where: {userId: jwtBody.user.id}});
       console.log(allTexts);
       return allTexts;
     } catch (err) {
@@ -51,18 +51,18 @@ export class TextController {
 
     try {
       var jwtBody = verify(jwt, 'encryption') as any;
-      console.log(jwtBody);
+      console.log(jwtBody.user.id);
 
       var testDate = new Date();
       var weekInMilliseconds = 7 * 24 * 60 * 60 * 1000;
-      var dayInMilliseconds = 24 * 60 * 60 * 1000;
-      // testDate.setTime(testDate.getTime() + weekInMilliseconds);
-      testDate.setTime(testDate.getTime() + dayInMilliseconds);
+      // var dayInMilliseconds = 24 * 60 * 60 * 1000;
+      testDate.setTime(testDate.getTime() + weekInMilliseconds);
+      // testDate.setTime(testDate.getTime() + dayInMilliseconds);
 
       var allWeekTexts = await this.textsRepo.find({
         where: {
           and: [
-            { userId: jwtBody.id },
+            { userId: jwtBody.user.id },
             { createdOn: { between: [testDate, new Date()] } }
           ]
         }

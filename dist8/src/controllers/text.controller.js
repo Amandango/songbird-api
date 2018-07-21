@@ -52,16 +52,16 @@ let TextController = class TextController {
             throw new rest_1.HttpErrors.Unauthorized('JWT token is required');
         try {
             var jwtBody = jsonwebtoken_1.verify(jwt, 'encryption');
-            console.log(jwtBody);
+            console.log(jwtBody.user.id);
             var testDate = new Date();
             var weekInMilliseconds = 7 * 24 * 60 * 60 * 1000;
-            var dayInMilliseconds = 24 * 60 * 60 * 1000;
-            // testDate.setTime(testDate.getTime() + weekInMilliseconds);
-            testDate.setTime(testDate.getTime() + dayInMilliseconds);
+            // var dayInMilliseconds = 24 * 60 * 60 * 1000;
+            testDate.setTime(testDate.getTime() + weekInMilliseconds);
+            // testDate.setTime(testDate.getTime() + dayInMilliseconds);
             var allWeekTexts = await this.textsRepo.find({
                 where: {
                     and: [
-                        { userId: jwtBody.id },
+                        { userId: jwtBody.user.id },
                         { createdOn: { between: [testDate, new Date()] } }
                     ]
                 }
