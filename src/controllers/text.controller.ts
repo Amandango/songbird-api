@@ -39,8 +39,6 @@ export class TextController {
         where:
         {
           userId: jwtBody.id,
-
-          order: 'createdOn ASC'
         },
       });
       return allTexts;
@@ -79,6 +77,7 @@ export class TextController {
 
   @post('/postVoiceRecordings')
   async postVoiceRecordingsById(@requestBody() voiceRecording: any): Promise<any> {
+    
     console.log('trying to work');
 
     var s3 = new AWS.S3();
