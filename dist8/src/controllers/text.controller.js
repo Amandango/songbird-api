@@ -116,7 +116,7 @@ __decorate([
     rest_1.post('/postVoiceRecordings'),
     __param(0, rest_1.requestBody()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [ArrayBuffer]),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], TextController.prototype, "postVoiceRecordingsById", null);
 TextController = __decorate([
