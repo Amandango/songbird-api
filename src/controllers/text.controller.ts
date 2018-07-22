@@ -38,8 +38,7 @@ export class TextController {
 
       var allTexts = await this.textsRepo.find({
         where: {userId: jwtBody.user.id}
-      },
-       { order: 'createdOn DESC' } 
+      }
     );
       console.log(allTexts);
       return allTexts;
