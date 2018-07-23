@@ -60,12 +60,15 @@
     "@types/jsonwebtoken": "^7.2.8",
     "aws-sdk": "^2.276.1",
     "bcrypt": "^1.0.3",
+    "date-streaks": "^1.1.1",
     "db-migrate": "^0.11.1",
     "db-migrate-mysql": "^1.1.10",
     "jsonwebtoken": "^8.3.0",
     "loopback-component-storage": "^3.5.0",
     "loopback-connector-mysql": "^5.2.0",
-    "s3-uploader": "^2.0.3"
+    "moment": "^2.22.2",
+    "s3-uploader": "^2.0.3",
+    "streaker-js": "0.0.1"
   },
   "devDependencies": {
     "@loopback/build": "^0.6.5",

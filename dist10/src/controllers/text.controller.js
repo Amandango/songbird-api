@@ -18,11 +18,13 @@ const texts_1 = require("../models/texts");
 const texts_repository_1 = require("../repositories/texts.repository");
 const users_repository_1 = require("../repositories/users.repository");
 const jsonwebtoken_1 = require("jsonwebtoken");
+var moment = require('moment');
 const { readFileSync } = require('fs');
 const { join, extname } = require('path');
 const AWS = require('aws-sdk');
 AWS.config.loadFromPath('src/config.json');
 let TextController = class TextController {
+    // public streak: number;
     constructor(textsRepo, usersRepo) {
         this.textsRepo = textsRepo;
         this.usersRepo = usersRepo;
@@ -41,39 +43,38 @@ let TextController = class TextController {
                 where: { userId: jwtBody.user.id }
             });
             console.log(allTexts);
+            console.log(allTexts[0].createdOn);
             return allTexts;
         }
         catch (err) {
             throw new rest_1.HttpErrors.BadRequest('JWT token invalid');
         }
     }
-    // @get('/getWeekTextsById')
-    // async getWeekTextsById(@param.query.string('jwt') jwt: string): Promise<Texts[]> {
-    //   if (!jwt) throw new HttpErrors.Unauthorized('JWT token is required');
-    //   try {
-    //     var jwtBody = verify(jwt, 'encryption') as any;
-    //     console.log(jwtBody.user.id);
-    //     var testDate = new Date();
-    //     var weekInMilliseconds = 7 * 24 * 60 * 60 * 1000;
-    //     // var dayInMilliseconds = 24 * 60 * 60 * 1000;
-    //     testDate.setTime(testDate.getTime() - weekInMilliseconds);
-    //     var currentDate = new Date();
-    //     console.log('the test date is' + testDate);
-    //     console.log('the current date is' + currentDate);
-    //     // testDate.setTime(testDate.getTime() + dayInMilliseconds);
-    //     var allWeekTexts = await this.textsRepo.find({
-    //       where: {
-    //         and: [
-    //           { userId: jwtBody.user.id },
-    //           { createdOn: { between: [testDate, currentDate] } }
-    //         ]
-    //       }
-    //     });
-    //     return allWeekTexts;
-    //   } catch (err) {
-    //     throw new HttpErrors.BadRequest('JWT token invalid');
-    //   }
-    // }
+    async getWeekTextsById(jwt) {
+        if (!jwt)
+            throw new rest_1.HttpErrors.Unauthorized('JWT token is required');
+        try {
+            var jwtBody = jsonwebtoken_1.verify(jwt, 'encryption');
+            console.log(jwtBody.user.id);
+            var testDate = new Date();
+            var weekInMilliseconds = 7 * 24 * 60 * 60 * 1000;
+            testDate.setTime(testDate.getTime() - weekInMilliseconds);
+            var stringTestDate = testDate.toISOString();
+            var currentDate = new Date().toISOString();
+            var allWeekTexts = await this.textsRepo.find({
+                where: {
+                    and: [
+                        { userId: jwtBody.user.id },
+                        { createdOn: { between: [stringTestDate, currentDate] } }
+                    ]
+                }
+            });
+            return allWeekTexts;
+        }
+        catch (err) {
+            throw new rest_1.HttpErrors.BadRequest('JWT token invalid');
+        }
+    }
     async postVoiceRecordingsById(voiceRecording) {
         console.log('trying to work');
         console.log(voiceRecording);
@@ -108,6 +109,13 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], TextController.prototype, "getTextsById", null);
+__decorate([
+    rest_1.get('/getWeekTextsById'),
+    __param(0, rest_1.param.query.string('jwt')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], TextController.prototype, "getWeekTextsById", null);
 __decorate([
     rest_1.post('/postVoiceRecordings'),
     __param(0, rest_1.requestBody()),

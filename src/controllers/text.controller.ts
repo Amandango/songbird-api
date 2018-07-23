@@ -4,6 +4,7 @@ import { Texts } from '../models/texts';
 import { TextsRepository } from '../repositories/texts.repository';
 import { UsersRepository } from "../repositories/users.repository";
 import { sign, verify } from 'jsonwebtoken';
+var moment = require('moment');
 
 import S3 = require('aws-sdk/clients/s3');
 
@@ -16,6 +17,7 @@ AWS.config.loadFromPath('src/config.json');
 export class TextController {
 
   public latestTexts: any;
+  // public streak: number;
 
   constructor(
     @repository(TextsRepository.name) private textsRepo: TextsRepository,
@@ -41,42 +43,40 @@ export class TextController {
       }
     );
       console.log(allTexts);
+      console.log(allTexts[0].createdOn);
       return allTexts;
     } catch (err) {
       throw new HttpErrors.BadRequest('JWT token invalid');
     }
   }
 
-  // @get('/getWeekTextsById')
-  // async getWeekTextsById(@param.query.string('jwt') jwt: string): Promise<Texts[]> {
-  //   if (!jwt) throw new HttpErrors.Unauthorized('JWT token is required');
+  @get('/getWeekTextsById')
+  async getWeekTextsById(@param.query.string('jwt') jwt: string): Promise<Texts[]> {
+    if (!jwt) throw new HttpErrors.Unauthorized('JWT token is required');
 
-  //   try {
-  //     var jwtBody = verify(jwt, 'encryption') as any;
-  //     console.log(jwtBody.user.id);
+    try {
+      var jwtBody = verify(jwt, 'encryption') as any;
+      console.log(jwtBody.user.id);
 
-  //     var testDate = new Date();
-  //     var weekInMilliseconds = 7 * 24 * 60 * 60 * 1000;
-  //     // var dayInMilliseconds = 24 * 60 * 60 * 1000;
-  //     testDate.setTime(testDate.getTime() - weekInMilliseconds);
-  //     var currentDate = new Date();
-  //     console.log('the test date is' + testDate);
-  //     console.log('the current date is' + currentDate);
-  //     // testDate.setTime(testDate.getTime() + dayInMilliseconds);
+      var testDate = new Date();
+      var weekInMilliseconds = 7 * 24 * 60 * 60 * 1000;
+      testDate.setTime(testDate.getTime() - weekInMilliseconds)
+      var stringTestDate = testDate.toISOString();
+      var currentDate = new Date().toISOString();
 
-  //     var allWeekTexts = await this.textsRepo.find({
-  //       where: {
-  //         and: [
-  //           { userId: jwtBody.user.id },
-  //           { createdOn: { between: [testDate, currentDate] } }
-  //         ]
-  //       }
-  //     });
-  //     return allWeekTexts;
-  //   } catch (err) {
-  //     throw new HttpErrors.BadRequest('JWT token invalid');
-  //   }
-  // }
+      var allWeekTexts = await this.textsRepo.find({
+        where: {
+          and: [
+            { userId: jwtBody.user.id },
+            { createdOn: { between: [stringTestDate, currentDate] } }
+          ]
+        }
+      });
+      return allWeekTexts;
+    } catch (err) {
+      throw new HttpErrors.BadRequest('JWT token invalid');
+    }
+  }
 
   @post('/postVoiceRecordings')
   async postVoiceRecordingsById(@requestBody() voiceRecording: any): Promise<any> {
@@ -162,4 +162,46 @@ export class TextController {
 //   };
 
 // }
+
+
+  // @get('/streak')
+  // async getStreak(@param.query.string('jwt') jwt: string): Promise<any> {
+  //   if (!jwt) throw new HttpErrors.Unauthorized('JWT token is required');
+
+  //   try {
+  //     var jwtBody = verify(jwt, 'encryption') as any;
+  //     console.log(jwtBody);
+      
+  //     await this.textsRepo.find(
+  //       {where: {userId: jwtBody.user.id}
+  //     },
+
+  //     { order: 'createdOn ASC'}
+
+  //   ).then( texts => {
+
+  //     console.log(texts[0].createdOn)
+
+  //     var currentTime = moment();
+  //     var timeStore = moment(texts[0].createdOn)
+
+  //     var streak = currentTime.diff(timeStore, 'h');
+  //     console.log(streak);
+
+  //     // console.log('this is the diff' + moment(moment.duration(moment(new Date()).diff(texts[0].createdOn))));
+
+  //     // if(moment(moment.duration(moment(new Date()).diff(texts[0].createdOn))) <= moment(''))
+
+  //     // for (var i = 0; i < texts.length; i++)
+  //     // if (moment(moment.duration(moment(new Date()).diff(texts[i].createdOn)).format('hh:mm:ss') <= moment('24:00:00').format('hh:mm:ss'))) {
+  //     //   this.streak += 1;
+  //     // }
+  //     // else {
+  //     //   this.streak = 0;
+  //     // }
+  //   } )
+  //   } catch (err) {
+  //     throw new HttpErrors.BadRequest('JWT token invalid');
+  //   }
+  // }
 }
