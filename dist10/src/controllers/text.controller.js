@@ -18,13 +18,9 @@ const texts_1 = require("../models/texts");
 const texts_repository_1 = require("../repositories/texts.repository");
 const users_repository_1 = require("../repositories/users.repository");
 const jsonwebtoken_1 = require("jsonwebtoken");
-var moment = require('moment');
-const { readFileSync } = require('fs');
-const { join, extname } = require('path');
 const AWS = require('aws-sdk');
 AWS.config.loadFromPath('src/config.json');
 let TextController = class TextController {
-    // public streak: number;
     constructor(textsRepo, usersRepo) {
         this.textsRepo = textsRepo;
         this.usersRepo = usersRepo;
@@ -82,7 +78,6 @@ let TextController = class TextController {
         var s3 = new AWS.S3();
         var bucketParams = { Bucket: 'songbird-bucket' };
         s3.createBucket(bucketParams);
-        // s3 = new AWS.S3({ params: { Bucket: 'songbird-bucket' } })
         var data = { Key: newDate, Body: voiceRecording };
         s3.putObject(data, function (err, data) {
             if (err) {

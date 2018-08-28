@@ -5,6 +5,7 @@ export declare class TextController {
     private textsRepo;
     private usersRepo;
     latestTexts: any;
+    streak: number;
     constructor(textsRepo: TextsRepository, usersRepo: UsersRepository);
     postTextMoment(textMoment: Texts): Promise<any>;
     getTextsById(jwt: string): Promise<Texts[]>;
