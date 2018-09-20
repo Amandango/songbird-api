@@ -7,12 +7,6 @@ const repository_1 = require("@loopback/repository");
 // Binding and Booter imports are required to infer types for BootMixin!
 const boot_1 = require("@loopback/boot");
 /* tslint:enable:no-unused-variable */
-
-var express = require('express');
-var cors = require('cors');
-var app = express();
-app.use(cors());
-
 class SongbirdApiApplication extends boot_1.BootMixin(repository_1.RepositoryMixin(rest_1.RestApplication)) {
     constructor(options) {
         // super(options);
@@ -54,4 +48,3 @@ class SongbirdApiApplication extends boot_1.BootMixin(repository_1.RepositoryMix
 }
 exports.SongbirdApiApplication = SongbirdApiApplication;
 //# sourceMappingURL=application.js.map
-
