@@ -1,0 +1,9 @@
+{
+    "accessKeyId": "AKIAJOZHTXFAEK3FOXTQ",
+    "secretAccessKey": "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",
+    "region": "us-east-1",
+    "remoting": {
+        "cors": false,
+        "handleErrors": false
+    }
+}
