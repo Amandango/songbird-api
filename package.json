@@ -12,7 +12,7 @@
     "npm": "5.6.0"
   },
   "scripts": {
-    "build": "npm run build:dist8 && npm run build:dist10",
+    "build": "",
     "build:apidocs": "lb-apidocs",
     "build:current": "lb-tsc",
     "build:dist8": "lb-tsc es2017",
